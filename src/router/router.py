@@ -1,8 +1,8 @@
-from fastapi import APIRouter
+from fastapi import APIRouter, Body
 from fastapi.responses import JSONResponse
-from schema import New_user
+from schema import New_user, Name
 from src.db.connection import connection
-from src.db.querys import inserir_user #Função que retorna uma query 
+from src.db.querys import inserir_user, delete #Função que retorna uma query 
 
 router = APIRouter()
 coon = connection()
@@ -19,3 +19,11 @@ def create_user(new_user:New_user):
 
     except:
         print('Erro ao cadastrar novo usuário')
+
+@router.delete('/user')
+def delete_user(name:Name = Body(...)):
+    try:
+        delete(coon, name.name)
+        return {'menssage':'Usuáro deletado (x)'}
+    except Exception as e:
+        return{'menssage':f'Erro ao tentar deletar usuário!! {e}'}
