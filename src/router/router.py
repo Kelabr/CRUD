@@ -2,7 +2,7 @@ from fastapi import APIRouter, Body
 from fastapi.responses import JSONResponse
 from schema import New_user, Name
 from src.db.connection import connection
-from src.db.querys import inserir_user, delete, update #Função que retorna uma query 
+from src.db.querys import inserir_user, delete, update, getUser #Função que retorna uma query 
 
 router = APIRouter()
 coon = connection()
@@ -35,3 +35,12 @@ def update_user(update_user:New_user):
         return {'Menssage':'Usuário Atualizado'}
     except Exception as e:
         return{'menssage':f'Erro ao atualizar {e}'}
+
+@router.get('/user')
+def getuser():
+    try:
+        response = getUser(coon)
+        return response
+    except Exception as e:
+        return{'menssage':f'Erro ao buscar usuários - {e}'}
+
