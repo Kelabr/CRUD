@@ -2,7 +2,7 @@ from fastapi import APIRouter, Body
 from fastapi.responses import JSONResponse
 from schema import New_user, Name
 from src.db.connection import connection
-from src.db.querys import inserir_user, delete #Função que retorna uma query 
+from src.db.querys import inserir_user, delete, update #Função que retorna uma query 
 
 router = APIRouter()
 coon = connection()
@@ -27,3 +27,11 @@ def delete_user(name:Name = Body(...)):
         return {'menssage':'Usuáro deletado (x)'}
     except Exception as e:
         return{'menssage':f'Erro ao tentar deletar usuário!! {e}'}
+
+@router.put('/user')
+def update_user(update_user:New_user):
+    try:
+        update(coon, update_user.name, update_user.email, update_user.password)
+        return {'Menssage':'Usuário Atualizado'}
+    except Exception as e:
+        return{'menssage':f'Erro ao atualizar {e}'}
